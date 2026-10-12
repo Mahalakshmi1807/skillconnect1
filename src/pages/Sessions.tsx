@@ -486,7 +486,7 @@ export default function Sessions() {
                           {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />} Day-wise Learning
                         </Button>
                       )}
-                      {isParticipant && !hasEnded && (
+                      {s.learner_id === profile?.id && !hasEnded && (
                         <Button size="sm" variant="danger" onClick={() => { setEndSessionTarget(s); setEndSessionDay(null); }}>
                           <X size={16} /> End Session
                         </Button>
@@ -565,7 +565,7 @@ export default function Sessions() {
                                     <button onClick={() => startEditDay(day)} className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50">
                                       <Pencil size={14} />
                                     </button>
-                                    {!hasEnded && (
+                                    {s.learner_id === profile?.id && !hasEnded && (
                                       <button
                                         onClick={() => { setEndSessionTarget(s); setEndSessionDay(day); }}
                                         className="text-xs px-2.5 py-1 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 font-medium"
