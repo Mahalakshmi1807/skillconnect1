@@ -22,6 +22,7 @@ export default function BrowseStudents() {
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
   const [filterLevel, setFilterLevel] = useState('');
+  const [expandedStudents, setExpandedStudents] = useState<Set<string>>(new Set());
 
   const [requestTarget, setRequestTarget] = useState<{ skill: Skill; studentName: string } | null>(null);
   const [requestMessage, setRequestMessage] = useState('');
@@ -68,6 +69,15 @@ export default function BrowseStudents() {
   }, [profile]);
 
   useEffect(() => { loadStudents(); }, [loadStudents]);
+
+  function toggleStudentSkills(studentId: string) {
+    setExpandedStudents((prev) => {
+      const next = new Set(prev);
+      if (next.has(studentId)) next.delete(studentId);
+      else next.add(studentId);
+      return next;
+    });
+  }
 
   async function handleSendRequest() {
     if (!requestTarget || !profile) return;
@@ -152,6 +162,9 @@ export default function BrowseStudents() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {filtered.map(({ profile: studentProfile, skills: studentSkills }) => {
             const initials = studentProfile.full_name.split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase();
+            const isExpanded = expandedStudents.has(studentProfile.id);
+            const visibleSkills = isExpanded ? studentSkills : studentSkills.slice(0, 3);
+            const remainingSkills = studentSkills.length - 3;
             return (
               <div key={studentProfile.id} className="bg-white rounded-xl border border-gray-100 p-5 card-hover">
                 <div className="flex items-start gap-3 mb-3">
@@ -170,7 +183,7 @@ export default function BrowseStudents() {
 
                 {studentSkills.length > 0 ? (
                   <div className="space-y-2">
-                    {studentSkills.slice(0, 3).map((skill) => (
+                    {visibleSkills.map((skill) => (
                       <div key={skill.id} className="rounded-lg bg-gray-50 p-3">
                         <div className="flex items-center justify-between gap-2">
                           <div className="min-w-0 flex-1">
@@ -188,7 +201,14 @@ export default function BrowseStudents() {
                       </div>
                     ))}
                     {studentSkills.length > 3 && (
-                      <p className="text-xs text-gray-400 text-center pt-1">+{studentSkills.length - 3} more skill{studentSkills.length - 3 !== 1 ? 's' : ''}</p>
+                      <button
+                        type="button"
+                        onClick={() => toggleStudentSkills(studentProfile.id)}
+                        className="w-full text-center text-xs font-medium text-emerald-600 hover:text-emerald-700 pt-1 transition-colors"
+                        aria-expanded={isExpanded}
+                      >
+                        {isExpanded ? 'Show Less' : `+${remainingSkills} More Skill${remainingSkills !== 1 ? 's' : ''}`}
+                      </button>
                     )}
                   </div>
                 ) : (

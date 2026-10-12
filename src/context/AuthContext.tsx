@@ -33,15 +33,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session: s } }) => {
-      setSession(s);
-      setUser(s?.user ?? null);
-      if (s?.user) {
-        loadProfile(s.user.id).finally(() => setLoading(false));
-      } else {
+    // Safety net: never leave the UI stuck on the full-page loader if auth fails.
+    const failsafe = setTimeout(() => setLoading(false), 10000);
+
+    supabase.auth
+      .getSession()
+      .then(({ data: { session: s } }) => {
+        setSession(s);
+        setUser(s?.user ?? null);
+        if (s?.user) {
+          loadProfile(s.user.id).finally(() => setLoading(false));
+        } else {
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        setSession(null);
+        setUser(null);
         setLoading(false);
-      }
-    });
+      });
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
@@ -58,6 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => {
+      clearTimeout(failsafe);
       authListener.subscription.unsubscribe();
     };
   }, []);

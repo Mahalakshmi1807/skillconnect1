@@ -98,6 +98,7 @@ export default function Login() {
               placeholder="Enter your password"
               required
               icon={<Lock size={18} />}
+              showPasswordToggle
             />
 
             {error && (
