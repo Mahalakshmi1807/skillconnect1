@@ -73,14 +73,12 @@ export default function Profile() {
       <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
         <div className="h-24 bg-gradient-to-r from-emerald-500 to-teal-600" />
         <div className="px-6 pb-6">
-          <div className="flex items-end gap-4 -mt-10">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-2xl font-bold border-4 border-white shrink-0">
-              {initials}
-            </div>
-            <div className="pb-1">
-              <h2 className="text-xl font-bold text-gray-800">{fullName}</h2>
-              <p className="text-sm text-gray-400">{user?.email}</p>
-            </div>
+          <div className="-mt-10 w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-2xl font-bold border-4 border-white shrink-0">
+            {initials}
+          </div>
+          <div className="mt-4">
+            <h2 className="text-xl font-bold text-gray-800">{fullName}</h2>
+            <p className="text-sm text-gray-400">{user?.email}</p>
           </div>
 
           {/* Stats */}

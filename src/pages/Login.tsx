@@ -51,7 +51,7 @@ export default function Login() {
             Exchange skills.<br />Grow together.
           </h1>
           <p className="text-emerald-100 text-lg leading-relaxed max-w-md">
-            Connect with fellow students, share your expertise, learn new skills,
+            Connect with skilled students, share your expertise, learn new skills,
             and grow together — all in one place.
           </p>
           <div className="mt-12 space-y-4">

@@ -98,6 +98,7 @@ export default function Register() {
               placeholder="At least 6 characters"
               required
               icon={<Lock size={18} />}
+              showPasswordToggle
             />
             <Select
               label="Department"

@@ -124,6 +124,7 @@ export const SKILL_CATEGORIES = [
   'Programming',
   'Design',
   'Languages',
+  'Communication Skills',
   'Music',
   'Academics',
   'Sports',

@@ -311,6 +311,13 @@ export default function Sessions() {
       });
     }
 
+    // Only learners are prompted to leave feedback; mentors just end the session.
+    if (endSessionTarget.learner_id !== profile.id) {
+      setEndSessionTarget(null);
+      loadSessions();
+      return;
+    }
+
     let dayId: string | null = null;
     if (endSessionDay) {
       dayId = endSessionDay.id;

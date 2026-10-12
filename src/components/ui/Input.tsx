@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 
 interface InputProps {
   label?: string;
@@ -10,6 +11,7 @@ interface InputProps {
   disabled?: boolean;
   error?: string;
   icon?: ReactNode;
+  showPasswordToggle?: boolean;
 }
 
 export function Input({
@@ -22,7 +24,12 @@ export function Input({
   disabled,
   error,
   icon,
+  showPasswordToggle,
 }: InputProps) {
+  const [revealed, setRevealed] = useState(false);
+  const isPassword = showPasswordToggle && type === 'password';
+  const inputType = isPassword && revealed ? 'text' : type;
+
   return (
     <div className="w-full">
       {label && (
@@ -33,14 +40,25 @@ export function Input({
       <div className="relative">
         {icon && <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">{icon}</div>}
         <input
-          type={type}
+          type={inputType}
           value={value}
           onChange={onChange}
           placeholder={placeholder}
           required={required}
           disabled={disabled}
-          className={`w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 disabled:bg-gray-50 disabled:text-gray-400 ${icon ? 'pl-10' : ''} ${error ? 'border-red-400' : 'border-gray-200'}`}
+          className={`w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 disabled:bg-gray-50 disabled:text-gray-400 ${icon ? 'pl-10' : ''} ${isPassword ? 'pr-10' : ''} ${error ? 'border-red-400' : 'border-gray-200'}`}
         />
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setRevealed((v) => !v)}
+            aria-label={revealed ? 'Hide password' : 'Show password'}
+            title={revealed ? 'Hide password' : 'Show password'}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+          >
+            {revealed ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        )}
       </div>
       {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
     </div>
